@@ -1,0 +1,37 @@
+name: Ruby
+
+on: [push]
+
+jobs:
+  test:
+    name: Test on ruby ${{ matrix.ruby_version }} and ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        ruby_version: ['2.6.x', '2.5.x']
+        os: [ubuntu-latest]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Ruby ${{ matrix.ruby_version }}
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby_version }}
+    - name: Install bundler gem
+      run: |
+        gem install bundler -N
+        bundle config path vendor/bundle
+    - uses: actions/cache@v1
+      id: bundle_install_cache
+      with:
+        path: vendor/bundle
+        key: ${{ matrix.os }}-${{ matrix.ruby-version}}-gem-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gem-
+    - name: Bundle install
+      if: steps.bundle_install_cache.outputs.cache-hit != 'true'
+      run: |
+        bundle install --jobs 4 --retry 3
+    - name: Run rspec
+      run: |
+        bundle exec rspec
