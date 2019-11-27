@@ -23,7 +23,7 @@ Or install it yourself as:
 ```ruby
 Sidekiq::Metrics.configure do |config|
   bigquery = Google::Cloud::Bigquery.new
-  config.adapter = Sidekiq::Metrics::Adapter::Bigquery.new(bigquery, 'my_dataset', 'my_table')
+  config.adapter = Sidekiq::Metrics::Adapter::Bigquery.new(bigquery.dataset('my_dataset'), 'my_table')
 end
 ```
 
