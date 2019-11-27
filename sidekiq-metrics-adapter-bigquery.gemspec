@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.5'
 
   spec.add_dependency 'sidekiq-metrics', '~> 0.1'
-  spec.add_dependency 'google-cloud-bigquery'
+  spec.add_dependency 'google-cloud-bigquery', '~> 1.18'
   spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
