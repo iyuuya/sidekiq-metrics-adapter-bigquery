@@ -3,6 +3,7 @@ PATH
   specs:
     sidekiq-metrics-adapter-bigquery (0.1.0)
       google-cloud-bigquery (~> 1.18)
+      sidekiq (>= 5.0)
       sidekiq-metrics (~> 0.1)
 
 GEM

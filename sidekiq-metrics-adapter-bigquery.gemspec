@@ -2,11 +2,10 @@
 
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'sidekiq/metrics/adapter/bigquery/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'sidekiq-metrics-adapter-bigquery'
-  spec.version       = Sidekiq::Metrics::Adapter::Bigquery::VERSION
+  spec.version       = '0.1.0'
   spec.authors       = %w[iyuuya]
   spec.email         = %w[i.yuuya@gmail.com]
 
@@ -29,6 +28,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
   spec.required_ruby_version = '>= 2.5'
 
+  spec.add_dependency 'sidekiq', '>= 5.0'
   spec.add_dependency 'sidekiq-metrics', '~> 0.1'
   spec.add_dependency 'google-cloud-bigquery', '~> 1.18'
   spec.add_development_dependency 'bundler', '~> 2.0'
