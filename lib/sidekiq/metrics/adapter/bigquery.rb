@@ -13,41 +13,36 @@ module Sidekiq
           include Sidekiq::Worker
 
           def perform(worker_status)
-            result = @table.insert([worker_status])
+            @worker_status = worker_status
+            # TODO: table-suffix
+            table = Sidekiq::Metrics.configuration.adapter.table_with_suffix(table_suffiix)
+            result = table.insert([worker_status])
 
             error = result.insert_error_for(worker_staus)
             raise InsertError, error.errors.to_json if error
           end
+
+          private
+
+          # _YYYYMMDD
+          def table_suffix
+            "_#{Time.at(@owrker_status['enqueed_at']).strftime('%y%m%d')}"
+          end
         end
 
-        # @param [Google::Cloud::Bigquery] bigquery
-        # @param [String] dataset
+        # @param [Google::Cloud::Bigquery::Datset] dataset
         # @param [String] table
-        # @param [Hash] mapping
         # @param [boolean] async
         # @param [Hash] sidekiq_worker_options
-        def initialize(bigquery,
-                       dataset,
-                       table = nil,
-                       mapping: {
-                         status: 'status',
-                         queue: 'queue',
-                         class: 'class',
-                         jid: 'jid',
-                         enqueued_at: 'enqueued_at',
-                         started_at: 'started_at',
-                         finished_at: 'finished_at'
-                       },
+        def initialize(dataset,
+                       table,
                        async: true,
                        sidekiq_worker_options: {
                          queue: :default,
                          retry: 5
                        })
-          @bigquery = bigquery
-          # TODO: check dataset and table
-          # TODO: table name with suffix
-          @table = @bigquery.dataset(dataset).table(table)
-          @mapping = mapping
+          @dataset = dataset
+          @table = table
           Worker.sidekiq_options(sidekiq_worker_options)
         end
 
@@ -55,14 +50,9 @@ module Sidekiq
           Worker.perform_async(worker_status)
         end
 
-        private
-
-        def mapped_row(worker_status)
-          {}.tap do |row|
-            @mapping.each do |from, to|
-              row[to] = worker_status[form]
-            end
-          end
+        # TODO: check table exist
+        def table_with_suffix(suffix = nil)
+          @dataset.table("#{@table}#{suffix}")
         end
       end
     end
