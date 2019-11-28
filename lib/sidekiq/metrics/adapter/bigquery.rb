@@ -2,7 +2,8 @@
 
 require 'time'
 require 'sidekiq/worker'
-require 'sidekiq/metrics/adapter/base'
+require 'sidekiq-metrics'
+require 'google/cloud/bigquery'
 
 module Sidekiq
   module Metrics
