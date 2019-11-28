@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'time'
 require 'sidekiq/worker'
 require 'sidekiq/metrics/adapter/base'
 
@@ -13,20 +14,23 @@ module Sidekiq
           include Sidekiq::Worker
 
           def perform(worker_status)
-            @worker_status = worker_status
-            # TODO: table-suffix
-            table = Sidekiq::Metrics.configuration.adapter.table_with_suffix(table_suffiix)
-            result = table.insert([worker_status])
+            @worker_status = {
+              queue: worker_status['queue'],
+              class: worker_status['class'],
+              retry: worker_status['retry'],
+              jid: worker_status['jid'],
+              status: worker_status['status'],
+              enqueued_at: worker_status['enqueued_at'],
+              started_at: worker_status['started_at'],
+              finished_at: worker_status['finished_at']
+            }
 
-            error = result.insert_error_for(worker_staus)
+            table_suffix = Time.at(worker_status['enqueued_at']).strftime('%Y%m%d')
+            table = Sidekiq::Metrics.configuration.adapter.table(table_suffix)
+            result = table.insert([@worker_status])
+
+            error = result.insert_error_for(@worker_status)
             raise InsertError, error.errors.to_json if error
-          end
-
-          private
-
-          # _YYYYMMDD
-          def table_suffix
-            "_#{Time.at(@owrker_status['enqueed_at']).strftime('%y%m%d')}"
           end
         end
 
@@ -44,15 +48,22 @@ module Sidekiq
           @dataset = dataset
           @table = table
           Worker.sidekiq_options(sidekiq_worker_options)
+
+          Sidekiq::Metrics.configure do |config|
+            config.excludes << Worker.name
+          end
         end
 
         def write(worker_status)
           Worker.perform_async(worker_status)
         end
 
-        # TODO: check table exist
-        def table_with_suffix(suffix = nil)
-          @dataset.table("#{@table}#{suffix}")
+        def table(suffix = nil)
+          unless table = @dataset.table("#{@table}_#{suffix}")
+            # TODO: create table?
+            raise 'Table not found'
+          end
+          table
         end
       end
     end
