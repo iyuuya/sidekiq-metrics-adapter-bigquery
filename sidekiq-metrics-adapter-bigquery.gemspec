@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = 'sidekiq-metrics-adapter-bigquery'
-  spec.version       = '0.1.0'
+  spec.version       = '0.1.0.alpha.1'
   spec.authors       = %w[iyuuya]
   spec.email         = %w[i.yuuya@gmail.com]
 
@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.5'
 
   spec.add_dependency 'sidekiq', '>= 5.0'
-  spec.add_dependency 'sidekiq-metrics', '~> 0.1'
+  spec.add_dependency 'sidekiq-metrics', '~> 0.2'
   spec.add_dependency 'google-cloud-bigquery', '~> 1.18'
   spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'rake', '~> 10.0'
