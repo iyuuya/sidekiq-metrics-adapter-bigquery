@@ -41,6 +41,7 @@ module Sidekiq
         # @param [Hash] sidekiq_worker_options
         def initialize(dataset,
                        table,
+                       with_suffix: true,
                        async: true,
                        sidekiq_worker_options: {
                          queue: :default,
@@ -48,6 +49,7 @@ module Sidekiq
                        })
           @dataset = dataset
           @table = table
+          @with_suffix = with_suffix
           Worker.sidekiq_options(sidekiq_worker_options)
 
           Sidekiq::Metrics.configure do |config|
@@ -60,11 +62,19 @@ module Sidekiq
         end
 
         def table(suffix = nil)
-          unless table = @dataset.table("#{@table}_#{suffix}")
+          unless table = @dataset.table(table_id(suffix))
             # TODO: create table?
             raise 'Table not found'
           end
           table
+        end
+
+        def table_id(suffix)
+          if @with_suffix
+            "#{@table}_#{suffix}"
+          else
+            @table
+          end
         end
       end
     end
