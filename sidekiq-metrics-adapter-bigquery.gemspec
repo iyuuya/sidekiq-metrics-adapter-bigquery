@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = 'sidekiq-metrics-adapter-bigquery'
-  spec.version       = '0.1.0.alpha.1'
+  spec.version       = '0.1.0.alpha.2'
   spec.authors       = %w[iyuuya]
   spec.email         = %w[i.yuuya@gmail.com]
 
