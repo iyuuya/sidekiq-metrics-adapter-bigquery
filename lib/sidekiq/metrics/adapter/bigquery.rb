@@ -71,7 +71,7 @@ module Sidekiq
 
         def table_id(suffix)
           if @with_suffix
-            "#{@table}_#{suffix}"
+            "#{@table}#{suffix}"
           else
             @table
           end
