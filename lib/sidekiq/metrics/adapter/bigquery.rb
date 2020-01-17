@@ -50,6 +50,7 @@ module Sidekiq
           @dataset = dataset
           @table = table
           @with_suffix = with_suffix
+          @async = async
           Worker.sidekiq_options(sidekiq_worker_options)
 
           Sidekiq::Metrics.configure do |config|

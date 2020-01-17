@@ -18,11 +18,23 @@ RSpec.describe Sidekiq::Metrics::Adapter::Bigquery do
   end
 
   describe '#write(worker_status)' do
-    it 'is expected to receive own worker.perform_async with worker_status' do
-      adapter = described_class.new(:dummy_dataset, :dummy_table, sidekiq_worker_options: { retry: 100, queue: :bigquery })
-      worker_status = {}
-      expect(Sidekiq::Metrics::Adapter::Bigquery::Worker).to receive(:perform_async).with(worker_status)
-      adapter.write(worker_status)
+    context 'when async = true' do
+      it 'is expected to receive own worker.perform_async with worker_status' do
+        adapter = described_class.new(:dummy_dataset, :dummy_table, async: true, sidekiq_worker_options: { retry: 100, queue: :bigquery })
+        worker_status = {}
+        expect(Sidekiq::Metrics::Adapter::Bigquery::Worker).to receive(:perform_async).with(worker_status)
+        adapter.write(worker_status)
+      end
+    end
+
+    context 'when async = false' do
+      it 'is expected to receive own worker.perform_async with worker_status' do
+        adapter = described_class.new(:dummy_dataset, :dummy_table, async: false, sidekiq_worker_options: { retry: 100, queue: :bigquery })
+        worker_status = {}
+        expect(Sidekiq::Metrics::Adapter::Bigquery::Worker).not_to receive(:perform_async).with(worker_status)
+        expect_any_instance_of(Sidekiq::Metrics::Adapter::Bigquery::Worker).to receive(:perform).with(worker_status)
+        adapter.write(worker_status)
+      end
     end
   end
 
@@ -30,7 +42,7 @@ RSpec.describe Sidekiq::Metrics::Adapter::Bigquery do
     it 'is expected to receive table' do
       dataset = double(:dataset)
       expect(dataset).to receive(:table).and_return(:dummy_table)
-      adapter = described_class.new(dataset, :dummy_table, sidekiq_worker_options: { retry: 100, queue: :bigquery })
+      adapter = described_class.new(dataset, :dummy_table, async: true, sidekiq_worker_options: { retry: 100, queue: :bigquery })
       adapter.table
     end
   end
