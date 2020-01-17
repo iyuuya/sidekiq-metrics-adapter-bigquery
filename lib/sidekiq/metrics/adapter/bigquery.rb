@@ -58,7 +58,11 @@ module Sidekiq
         end
 
         def write(worker_status)
-          Worker.perform_async(worker_status)
+          if @async
+            Worker.perform_async(worker_status)
+          else
+            Worker.new.perform(worker_status)
+          end
         end
 
         def table(suffix = nil)
