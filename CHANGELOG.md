@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.0.alpha.5 - 2019-01-20
+### Fix
+- indifferent access `worker_status` keys
+
 ## 0.1.0.alpha.4 - 2019-01-17
 ### Fix
 - `async` option
