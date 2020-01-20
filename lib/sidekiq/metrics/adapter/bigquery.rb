@@ -16,17 +16,21 @@ module Sidekiq
 
           def perform(worker_status)
             @worker_status = {
-              queue: worker_status['queue'],
-              class: worker_status['class'],
-              retry: worker_status['retry'],
-              jid: worker_status['jid'],
-              status: worker_status['status'],
-              enqueued_at: worker_status['enqueued_at'],
-              started_at: worker_status['started_at'],
-              finished_at: worker_status['finished_at']
+              queue: worker_status['queue'] || worker_status[:queue],
+              class: worker_status['class'] || worker_status[:class],
+              retry: worker_status['retry'] || worker_status[:retry],
+              jid: worker_status['jid'] || worker_status[:jid],
+              status: worker_status['status'] || worker_status[:status],
+              enqueued_at: worker_status['enqueued_at'] || worker_status[:enqueued_at],
+              started_at: worker_status['started_at'] || worker_status[:stared_at],
+              finished_at: worker_status['finished_at'] || worker_status[:finished_at]
             }
 
-            table_suffix = Time.at(worker_status['enqueued_at']).strftime('%Y%m%d')
+            table_suffix = begin
+                             Time.at(@worker_status[:enqueued_at]).strftime('%Y%m%d')
+                           rescue
+                             nil
+                           end
             table = Sidekiq::Metrics.configuration.adapter.table(table_suffix)
             result = table.insert([@worker_status])
 
