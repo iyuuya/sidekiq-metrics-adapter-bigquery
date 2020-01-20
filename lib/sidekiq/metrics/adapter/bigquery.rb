@@ -22,7 +22,7 @@ module Sidekiq
               jid: worker_status['jid'] || worker_status[:jid],
               status: worker_status['status'] || worker_status[:status],
               enqueued_at: worker_status['enqueued_at'] || worker_status[:enqueued_at],
-              started_at: worker_status['started_at'] || worker_status[:stared_at],
+              started_at: worker_status['started_at'] || worker_status[:started_at],
               finished_at: worker_status['finished_at'] || worker_status[:finished_at]
             }
 
