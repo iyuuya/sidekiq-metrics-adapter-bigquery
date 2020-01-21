@@ -49,8 +49,8 @@ module Sidekiq
         # @param [Hash] sidekiq_worker_options
         def initialize(dataset,
                        table,
-                       with_suffix: true,
-                       async: true,
+                       with_suffix: false,
+                       async: false,
                        raise_error: false,
                        sidekiq_worker_options: {
                          queue: :default,
