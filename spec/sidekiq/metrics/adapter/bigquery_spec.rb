@@ -17,6 +17,14 @@ RSpec.describe Sidekiq::Metrics::Adapter::Bigquery do
     end
   end
 
+  describe 'accessor' do
+    subject { described_class.new(:dummy_dataset, :dummy_table, with_suffix: false, async: false, raise_error: true) }
+
+    it { expect(subject.with_suffix).to eq false }
+    it { expect(subject.async).to eq false }
+    it { expect(subject.raise_error).to eq true }
+  end
+
   describe '#write(worker_status)' do
     context 'when async = true' do
       it 'is expected to receive own worker.perform_async with worker_status' do
@@ -61,6 +69,7 @@ RSpec.describe Sidekiq::Metrics::Adapter::Bigquery::Worker do
         ))
 
         adapter = double(:adapter)
+        allow(adapter).to receive(:raise_error).and_return(false)
         allow(adapter).to receive(:table).and_return(table)
 
         config.adapter = adapter

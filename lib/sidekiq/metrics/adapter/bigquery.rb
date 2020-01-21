@@ -34,10 +34,14 @@ module Sidekiq
             table = Sidekiq::Metrics.configuration.adapter.table(table_suffix)
             result = table.insert([@worker_status])
 
-            error = result.insert_error_for(@worker_status)
-            raise InsertError, error.errors.to_json if error
+            if Sidekiq::Metrics.configuration.adapter.raise_error
+              error = result.insert_error_for(@worker_status)
+              raise InsertError, error.errors.to_json if error
+            end
           end
         end
+
+        attr_reader :with_suffix, :async, :raise_error
 
         # @param [Google::Cloud::Bigquery::Datset] dataset
         # @param [String] table
@@ -47,6 +51,7 @@ module Sidekiq
                        table,
                        with_suffix: true,
                        async: true,
+                       raise_error: false,
                        sidekiq_worker_options: {
                          queue: :default,
                          retry: 5
@@ -55,6 +60,7 @@ module Sidekiq
           @table = table
           @with_suffix = with_suffix
           @async = async
+          @raise_error = raise_error
           Worker.sidekiq_options(sidekiq_worker_options)
 
           Sidekiq::Metrics.configure do |config|
