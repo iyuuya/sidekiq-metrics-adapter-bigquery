@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sidekiq-metrics-adapter-bigquery (0.1.0.alpha.3)
+    sidekiq-metrics-adapter-bigquery (0.1.0)
       google-cloud-bigquery (~> 1.18)
       sidekiq (>= 5.0)
       sidekiq-metrics (~> 0.2)
@@ -67,15 +67,15 @@ GEM
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
       rspec-mocks (~> 3.9.0)
-    rspec-core (3.9.0)
-      rspec-support (~> 3.9.0)
+    rspec-core (3.9.1)
+      rspec-support (~> 3.9.1)
     rspec-expectations (3.9.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
-    rspec-mocks (3.9.0)
+    rspec-mocks (3.9.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
-    rspec-support (3.9.0)
+    rspec-support (3.9.2)
     sidekiq (6.0.4)
       connection_pool (>= 2.2.2)
       rack (>= 2.0.0)
