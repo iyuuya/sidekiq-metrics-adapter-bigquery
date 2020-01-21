@@ -1,18 +1,26 @@
 # CHANGELOG
 
-## 0.1.0.alpha.6 - 2019-01-20
+## 0.1.0 - 2020-01-21
+### Add
+- add option of raise error when insert failed
+### Fix
+- default option
+  - table with suffix => false
+  - async transfer => false
+
+## 0.1.0.alpha.6 - 2020-01-20
 ### Fix
 - typo
 
-## 0.1.0.alpha.5 - 2019-01-20
+## 0.1.0.alpha.5 - 2020-01-20
 ### Fix
 - indifferent access `worker_status` keys
 
-## 0.1.0.alpha.4 - 2019-01-17
+## 0.1.0.alpha.4 - 2020-01-17
 ### Fix
 - `async` option
 
-## 0.1.0.alpha.3 - 2019-01-17
+## 0.1.0.alpha.3 - 2020-01-17
 ### Add
 - `async` option
 
