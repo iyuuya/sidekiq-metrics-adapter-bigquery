@@ -32,6 +32,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'sidekiq-metrics', '~> 0.2'
   spec.add_dependency 'google-cloud-bigquery', '~> 1.18'
   spec.add_development_dependency 'bundler', '~> 2.0'
-  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rake', '~> 12.3'
   spec.add_development_dependency 'rspec', '~> 3.0'
 end
